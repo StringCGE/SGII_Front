@@ -49,22 +49,22 @@ class PersonaService {
       );
       return ResultOf<Persona>(
         success: true,
-        message: "",
-        errror: "",
+        message: '',
+        errror: '',
         value: existe,
       );
     }catch(e){
       return ResultOf<Persona>(
         success: false,
-        message: "",
-        errror: "",
+        message: '',
+        errror: '',
         e: e,
       );
     }
   }
   Future<ResultOf<Persona>> _getItemById_Api(int id) async {
     try{
-      final url = Uri.parse('${Config.url}/api/Persona/${id}');
+      final url = Uri.parse('${Config.urlApi}/api/Persona/${id}');
       final response = await http.get(
         url,
         headers: {
@@ -79,21 +79,21 @@ class PersonaService {
         return ResultOf<Persona>(
           success: true,
           value: list[0],
-          message: "Persona leido correctamente",
-          errror: "",
+          message: 'Persona leido correctamente',
+          errror: '',
         );
       } else {
         return ResultOf<Persona>(
           success: false,
-          message: "",
-          errror: "Error al leer Persona",
+          message: '',
+          errror: 'Error al leer Persona',
         );
       }
     }catch(e){
       return ResultOf<Persona>(
         success: false,
-        message: "",
-        errror: "Error al leer Persona",
+        message: '',
+        errror: 'Error al leer Persona',
         e: e,
       );
     }
@@ -113,15 +113,15 @@ class PersonaService {
     lItem.add(value);
     return Result(
       success: true,
-      message: "",
-      errror: "",
+      message: '',
+      errror: '',
     );
   }
   Future<Result> _createItem_Api(Persona value) async {
     value.local = 0;
     Map<String, dynamic> map = value.toMap();
     final response = await http.post(
-      Uri.parse('${Config.url}/api/Persona'), // Cambia el endpoint según tu API
+      Uri.parse('${Config.urlApi}/api/Persona'), // Cambia el endpoint según tu API
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -130,14 +130,14 @@ class PersonaService {
     if (response.statusCode == 201) {
       return Result(
         success: true,
-        message: "Persona agregado correctamente",
-        errror: "",
+        message: 'Persona agregado correctamente',
+        errror: '',
       );
     } else {
       return Result(
         success: false,
-        message: "",
-        errror: "Error al agregar value",
+        message: '',
+        errror: 'Error al agregar Persona',
       );
     }
   }
@@ -160,30 +160,31 @@ class PersonaService {
     value.local = 2;
     return Result(
       success: true,
-      message: "Persona actualizado correctamente.",
-      errror: "",
+      message: 'Persona actualizado correctamente.',
+      errror: '',
     );
   }
   Future<Result> _updateItem_Api(Persona value) async {
     value.local = 0;
+    Map<String, dynamic> map = value.toMap();
     final response = await http.put(
-      Uri.parse('${Config.url}/api/Persona/${value.id}'),
+      Uri.parse('${Config.urlApi}/api/Persona/${value.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(value.toMap()),
+      body: jsonEncode(map),
     );
     if (response.statusCode == 200) {
       return Result(
         success: true,
-        message: "Persona actualizado correctamente",
-        errror: "",
+        message: 'Persona actualizado correctamente',
+        errror: '',
       );
     } else {
       return Result(
         success: false,
-        message: "",
-        errror: "Error al actualizar persona",
+        message: '',
+        errror: 'Error al actualizar persona',
       );
     }
   }
@@ -207,7 +208,7 @@ class PersonaService {
   Future<ResultOf<List<Persona>>> _fetchData_Api(DateTime offset, int take, String? nombre) async {
     String fecha = Parse.getDatetimeToStringFromQuery(offset);
 
-    StringBuffer urlBuilder = StringBuffer('${Config.url}/api/Persona?offsetDT=$fecha&take=$take');
+    StringBuffer urlBuilder = StringBuffer('${Config.urlApi}/api/Persona?offsetDT=$fecha&take=$take');
     if (nombre != null && nombre.isNotEmpty) {
       urlBuilder.write('&nombre=$nombre');
     }
@@ -229,15 +230,15 @@ class PersonaService {
 
         return ResultOf<List<Persona>>(
           success: true,
-          message: "",
-          errror: "",
+          message: '',
+          errror: '',
           value: nuevosItem,
         );
       } else {
         return ResultOf<List<Persona>>(
           success: false,
-          message: "",
-          errror: "Error al obtener datos del API",
+          message: '',
+          errror: 'Error al obtener datos del API',
           value: [],
           e: null,
         );
@@ -245,8 +246,8 @@ class PersonaService {
     } catch (e) {
       return ResultOf<List<Persona>>(
         success: false,
-        message: "",
-        errror: "Error al obtener datos del API",
+        message: '',
+        errror: 'Error al obtener datos del API',
         value: [],
         e: e,
       );
@@ -271,8 +272,8 @@ class PersonaService {
     List<Persona> items_ = filteredItems.take(take).toList();
     return ResultOf<List<Persona>>(
       success: true,
-      message: "",
-      errror: "",
+      message: '',
+      errror: '',
       value: items_,
       e: null,
     );
@@ -314,7 +315,7 @@ class PersonaService {
   Future<bool> _isConnectedToInternet() async {
     if (kIsWeb) {
       try {
-        final response = await http.get(Uri.parse('${Config.url}/api/Status'));
+        final response = await http.get(Uri.parse('${Config.urlApi}/api/Status'));
         return response.statusCode == 200;
       } catch (e) {
         return false;

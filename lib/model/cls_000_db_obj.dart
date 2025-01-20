@@ -32,6 +32,7 @@ class DbObj {
     int idPersReg = Parse.getInt(map['idPersReg']);
     int estado = Parse.getInt(map['estado']);
 
+    dynamic ob = map['ob'];
     return DbObj(
       id: id,
       idApi: idApi,
@@ -72,5 +73,9 @@ class DbObj {
       idPersReg: -1,
       estado: -1,
     );
+  }
+
+  String getValueStr(){
+    return "Hola que hace";
   }
 }

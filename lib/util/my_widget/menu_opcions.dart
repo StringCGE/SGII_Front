@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:sgii_front/util/common/nav.dart';
 import 'package:sgii_front/util/common/opcion.dart';
 import 'package:sgii_front/util/my_widget/main_logon_widget.dart';
-import 'package:sgii_front/view/mod_logon/mod_09_basicos/estado_civil/main_module_estado_civil.dart';
-import 'package:sgii_front/view/mod_logon/mod_09_basicos/nacionalidad/main_module_nacionalidad.dart';
-import 'package:sgii_front/view/mod_logon/mod_09_basicos/sexo/main_module_sexo.dart';
+import 'package:sgii_front/view/mod_estado_civil/main_module_estado_civil.dart';
+import 'package:sgii_front/view/mod_nacionalidad/main_module_nacionalidad.dart';
+import 'package:sgii_front/view/mod_persona/create_edit_persona_widget.dart';
+import 'package:sgii_front/view/mod_persona/main_module_persona.dart';
+import 'package:sgii_front/view/mod_sexo/main_module_sexo.dart';
+import 'package:sgii_front/view/mod_user/create_edit_user_widget.dart';
+import 'package:sgii_front/view/mod_user/main_module_user.dart';
 
 class MenuOptions{
+  late List<String> roles;
+  late List<Opcion> menuOpcion;
+  MenuOptions({
+    required this.roles,
+  }){
+    menuOpcion  = Opcion.filtrarOpcionesPorRoles(menuOpcionTodas, roles);
+  }
+
   bool isSidebarVisible = false;
   bool isPinned = false;
   String strSeleccion = "Aun no se selecciono";
   Opcion? seleccion = null;
 
-  List<Opcion> menuOpcion = [
+
+  List<Opcion> menuOpcionTodas = [
     // Gestión de Inventario
     Opcion(
+      roles: [], esOpcion: false,
       nombre: 'Inventario', ejecutar: (BuildContext context, MenuOptions mo){
-        /*Navigator.push(
+      /*Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => MainLogonWidget(
@@ -24,10 +39,11 @@ class MenuOptions{
             ),
           ),
         );*/
-      },
+    },
       icono: Icons.inventory,
       opciones: [
         Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
           nombre: 'Ver productos',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -44,6 +60,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['inventario'], esOpcion: true,
           nombre: 'Agregar producto',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -60,6 +77,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: [ 'gerente', 'inventario'], esOpcion: true,
           nombre: 'Existencias',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -80,6 +98,7 @@ class MenuOptions{
 
     // Gestión de Compras
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: false,
       nombre: 'Compras',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -95,22 +114,7 @@ class MenuOptions{
       icono: Icons.shopping_cart,
       opciones: [
         Opcion(
-          nombre: 'Registrar compra',
-          ejecutar: (BuildContext context, MenuOptions mo){
-            /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: RegistrarCompraScreen()
-              ),
-            ),
-          );*/
-          },
-          icono: Icons.note_add,
-          opciones: [],
-        ),
-        Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
           nombre: 'Facturación de compra',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -127,40 +131,10 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
-          nombre: 'Notas de crédito (Devoluciones)',
+          roles: ['gerente', 'inventario'],  esOpcion: true,
+          nombre: 'Historial de compras',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: NotasDeCreditoComprasScreen()
-              ),
-            ),
-          );*/
-          },
-          icono: Icons.credit_score,
-          opciones: [
-            Opcion(
-              nombre: 'Registrar devolución de compra',
-              ejecutar: (BuildContext context, MenuOptions mo){
-                /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainLogonWidget(
-                      menuOptions: mo,
-                      child: RegistrarDevolucionCompraScreen()
-                  ),
-                ),
-              );*/
-              },
-              icono: Icons.add_box,
-              opciones: [],
-            ),
-            Opcion(
-              nombre: 'Historial de devoluciones',
-              ejecutar: (BuildContext context, MenuOptions mo){
-                /*Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MainLogonWidget(
@@ -169,18 +143,50 @@ class MenuOptions{
                   ),
                 ),
               );*/
-              },
-              icono: Icons.history,
-              opciones: [],
-            ),
-          ],
+          },
+          icono: Icons.history,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
+          nombre: 'Notas de credito Compras',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainLogonWidget(
+                      menuOptions: mo,
+                      child: RegistrarDevolucionCompraScreen()
+                  ),
+                ),
+              );*/
+          },
+          icono: Icons.add_box,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['gerente', 'inventario',], esOpcion: true,
+          nombre: 'Historial de devoluciones compradas',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainLogonWidget(
+                      menuOptions: mo,
+                      child: HistorialDevolucionesScreen()
+                  ),
+                ),
+              );*/
+          },
+          icono: Icons.history,
+          opciones: [],
         ),
       ],
     ),
 
-
     // Gestión de Ventas
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: false,
       nombre: 'Ventas',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -196,22 +202,7 @@ class MenuOptions{
       icono: Icons.sell,
       opciones: [
         Opcion(
-          nombre: 'Registrar venta',
-          ejecutar: (BuildContext context, MenuOptions mo){
-            /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: RegistrarVentaScreen()
-              ),
-            ),
-          );*/
-          },
-          icono: Icons.add_shopping_cart,
-          opciones: [],
-        ),
-        Opcion(
+          roles: ['gerente', 'cajero'],  esOpcion: true,
           nombre: 'Facturación de venta',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -228,40 +219,10 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
-          nombre: 'Notas de crédito (Devoluciones)',
+          roles: ['gerente', 'inventario'], esOpcion: true,
+          nombre: 'Historial de ventas',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: NotasDeCreditoVentasScreen()
-              ),
-            ),
-          );*/
-          },
-          icono: Icons.credit_score,
-          opciones: [
-            Opcion(
-              nombre: 'Registrar devolución de venta',
-              ejecutar: (BuildContext context, MenuOptions mo){
-                /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainLogonWidget(
-                      menuOptions: mo,
-                      child: RegistrarDevolucionVentaScreen()
-                  ),
-                ),
-              );*/
-              },
-              icono: Icons.add_box,
-              opciones: [],
-            ),
-            Opcion(
-              nombre: 'Historial de devoluciones',
-              ejecutar: (BuildContext context, MenuOptions mo){
-                /*Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MainLogonWidget(
@@ -270,17 +231,50 @@ class MenuOptions{
                   ),
                 ),
               );*/
-              },
-              icono: Icons.history,
-              opciones: [],
-            ),
-          ],
+          },
+          icono: Icons.history,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
+          nombre: 'Notas de credito Ventas',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainLogonWidget(
+                      menuOptions: mo,
+                      child: HistorialDevolucionesVentasScreen()
+                  ),
+                ),
+              );*/
+          },
+          icono: Icons.history,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
+          nombre: 'Historial de devoluciones Ventas',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainLogonWidget(
+                      menuOptions: mo,
+                      child: HistorialDevolucionesVentasScreen()
+                  ),
+                ),
+              );*/
+          },
+          icono: Icons.history,
+          opciones: [],
         ),
       ],
     ),
 
     //Cliente
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'],  esOpcion: false,
       nombre: 'Clientes',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -296,6 +290,7 @@ class MenuOptions{
       icono: Icons.person,
       opciones: [
         Opcion(
+          roles: ['gerente', 'cajero'], esOpcion: true,
           nombre: 'Ver clientes',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -312,6 +307,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['gerente', 'cajero'], esOpcion: true,
           nombre: 'Agregar cliente',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -330,6 +326,7 @@ class MenuOptions{
       ],
     ),
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: false,
       nombre: 'Proveedores',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -345,6 +342,7 @@ class MenuOptions{
       icono: Icons.business,
       opciones: [
         Opcion(
+          roles: ['inventario'], esOpcion: true,
           nombre: 'Ver proveedores',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -361,6 +359,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['inventario'], esOpcion: true,
           nombre: 'Agregar proveedor',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -380,6 +379,7 @@ class MenuOptions{
     ),
     // Gestión de Usuarios
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: false,
       nombre: 'Usuarios',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -395,38 +395,85 @@ class MenuOptions{
       icono: Icons.people,
       opciones: [
         Opcion(
+          roles: ['admin', 'gerente'], esOpcion: true,
           nombre: 'Ver usuarios',
           ejecutar: (BuildContext context, MenuOptions mo){
-            /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: VerUsuariosScreen()
+            Nav.navDropAll(
+              context: context,
+              next: () => MainLogonWidget(
+                menuOptions: mo,
+                child: MainModuleUser(),
               ),
-            ),
-          );*/
+              settingName: 'MainModuleUser',
+              settingArg: null
+            );
           },
           icono: Icons.list_alt,
           opciones: [],
         ),
         Opcion(
+          roles: ['admin', 'gerente'],  esOpcion: true,
           nombre: 'Agregar usuario',
           ejecutar: (BuildContext context, MenuOptions mo){
-            /*Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainLogonWidget(
-                  menuOptions: mo,
-                  child: AgregarUsuarioScreen()
+            Nav.push(
+              context: context,
+              next: () => MainLogonWidget(
+                menuOptions: mo,
+                child: CreateEditUserWidget(
+                  item: null,
+                  result: (r){
+                    Nav.navPop(context: context);
+                  },
+                  mostrarCancelar: false),
               ),
-            ),
-          );*/
+              settingName: 'MainModuleUser',
+              settingArg: null
+            );
           },
           icono: Icons.add_circle,
           opciones: [],
         ),
         Opcion(
+          roles: ['admin', 'gerente'], esOpcion: true,
+          nombre: 'Ver personas',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            Nav.navDropAll(
+              context: context,
+              next: () => MainLogonWidget(
+                menuOptions: mo,
+                child: MainModulePersona(),
+              ),
+              settingName: 'MainModulePersona',
+              settingArg: null
+            );
+          },
+          icono: Icons.list_alt,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['admin', 'gerente'],  esOpcion: true,
+          nombre: 'Agregar personas',
+          ejecutar: (BuildContext context, MenuOptions mo){
+            Nav.push(
+                context: context,
+                next: () => MainLogonWidget(
+                  menuOptions: mo,
+                  child: CreateEditPersonaWidget(
+                      item: null,
+                      result: (r){
+                        Nav.navPop(context: context);
+                      },
+                      mostrarCancelar: false),
+                ),
+                settingName: 'MainModulePersona',
+                settingArg: null
+            );
+          },
+          icono: Icons.add_circle,
+          opciones: [],
+        ),
+        Opcion(
+          roles: ['admin'], esOpcion: true,
           nombre: 'Asignar roles y permisos',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -446,6 +493,7 @@ class MenuOptions{
     ),
     // Reportes y Estadísticas
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: false,
       nombre: 'Reportes y Estadísticas',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -461,6 +509,7 @@ class MenuOptions{
       icono: Icons.bar_chart,
       opciones: [
         Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
           nombre: 'Ventas por período',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -477,6 +526,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['gerente', 'inventario'], esOpcion: true,
           nombre: 'Compras por período',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -493,6 +543,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['gerente', 'inventario'],  esOpcion: true,
           nombre: 'Productos más vendidos',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -509,6 +560,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: [ 'gerente', 'inventario'],  esOpcion: true,
           nombre: 'Inventario bajo mínimo',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -529,6 +581,7 @@ class MenuOptions{
 
     //Básico
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'],  esOpcion: false,
       nombre: 'Básico',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -544,48 +597,51 @@ class MenuOptions{
       icono: Icons.business,
       opciones: [
         Opcion(
+          roles: ['gerente'], esOpcion: true,
           nombre: 'Sexo',
           ejecutar: (BuildContext context, MenuOptions mo){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainLogonWidget(
+            Nav.push(
+                context: context,
+                next: () => MainLogonWidget(
                     menuOptions: mo,
                     child: MainModuleSexo()
                 ),
-              ),
+                settingName: 'MainModulePersona',
+                settingArg: null
             );
           },
           icono: Icons.groups,
           opciones: [],
         ),
         Opcion(
+          roles: ['gerente'],  esOpcion: true,
           nombre: 'Nacionalidad',
           ejecutar: (BuildContext context, MenuOptions mo){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainLogonWidget(
+            Nav.push(
+                context: context,
+                next: () => MainLogonWidget(
                     menuOptions: mo,
                     child: MainModuleNacionalidad()
                 ),
-              ),
+                settingName: 'MainModulePersona',
+                settingArg: null
             );
           },
           icono: Icons.groups,
           opciones: [],
         ),
         Opcion(
+          roles: ['gerente'],  esOpcion: true,
           nombre: 'Estado Civil',
           ejecutar: (BuildContext context, MenuOptions mo){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainLogonWidget(
+            Nav.push(
+                context: context,
+                next: () => MainLogonWidget(
                     menuOptions: mo,
                     child: MainModuleEstadoCivil()
                 ),
-              ),
+                settingName: 'MainModulePersona',
+                settingArg: null
             );
           },
           icono: Icons.groups,
@@ -597,6 +653,7 @@ class MenuOptions{
 
     // Configuraciones
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'],  esOpcion: false,
       nombre: 'Configuraciones',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -612,6 +669,7 @@ class MenuOptions{
       icono: Icons.settings,
       opciones: [
         Opcion(
+          roles: ['admin'], esOpcion: true,
           nombre: 'Configuración general del sistema',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -628,6 +686,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: [ 'gerente'],  esOpcion: true,
           nombre: 'Monedas e impuestos',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -644,6 +703,7 @@ class MenuOptions{
           opciones: [],
         ),
         Opcion(
+          roles: ['admin', 'gerente'], esOpcion: true,
           nombre: 'Respaldo y restauración de datos',
           ejecutar: (BuildContext context, MenuOptions mo){
             /*Navigator.push(
@@ -664,6 +724,7 @@ class MenuOptions{
 
     // Salir del sistema
     Opcion(
+      roles: ['admin', 'gerente', 'inventario', 'cajero'], esOpcion: true,
       nombre: 'Salir del sistema',
       ejecutar: (BuildContext context, MenuOptions mo){
         /*Navigator.push(
@@ -680,5 +741,4 @@ class MenuOptions{
       opciones: [],
     ),
   ];
-
 }

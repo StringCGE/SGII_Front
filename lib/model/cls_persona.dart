@@ -1,6 +1,6 @@
-import 'package:sgii_front/model/basicos/cls_estado_civil.dart';
-import 'package:sgii_front/model/basicos/cls_nacionalidad.dart';
-import 'package:sgii_front/model/basicos/cls_sexo.dart';
+import 'package:sgii_front/model/cls_estado_civil.dart';
+import 'package:sgii_front/model/cls_nacionalidad.dart';
+import 'package:sgii_front/model/cls_sexo.dart';
 import 'package:sgii_front/model/cls_000_db_obj.dart';
 import 'package:sgii_front/service/serv_estado_civil.dart';
 import 'package:sgii_front/service/serv_nacionalidad.dart';
@@ -95,7 +95,7 @@ class Persona extends DbObj {
       id = Parse.getInt(map['id']);
       idApi = Parse.getInt(map['idApi']);
 
-      Map<String, dynamic> sexo_map = map['sexo'];
+      Map<String, dynamic> sexo_map = map['mod_sexo'];
       sexo_id = Parse.getInt(sexo_map['id']);
       sexo_idApi = Parse.getInt(sexo_map['idApi']);
 
@@ -103,7 +103,7 @@ class Persona extends DbObj {
       estadoCivil_id = Parse.getInt(estadoCivil_map['id']);
       estadoCivil_idApi = Parse.getInt(estadoCivil_map['idApi']);
 
-      Map<String, dynamic> nacionalidad_map = map['nacionalidad'];
+      Map<String, dynamic> nacionalidad_map = map['mod_nacionalidad'];
       nacionalidad_id = Parse.getInt(nacionalidad_map['id']);
       nacionalidad_idApi = Parse.getInt(nacionalidad_map['idApi']);
     }
@@ -157,7 +157,7 @@ class Persona extends DbObj {
       /*sexo_idApi = Parse.getInt(map['sexo_id']);
       estadoCivil_idApi = Parse.getInt(map['estadoCivil_id']);
       nacionalidad_idApi = Parse.getInt(map['nacionalidad_id']);*/
-      Map<String, dynamic> sexo_map = map['sexo'];
+      Map<String, dynamic> sexo_map = map['mod_sexo'];
       sexo_id = Parse.getInt(sexo_map['id']);
       sexo_idApi = Parse.getInt(sexo_map['id']);
 
@@ -165,14 +165,14 @@ class Persona extends DbObj {
       estadoCivil_id = Parse.getInt(estadoCivil_map['id']);
       estadoCivil_idApi = Parse.getInt(estadoCivil_map['id']);
 
-      Map<String, dynamic> nacionalidad_map = map['nacionalidad'];
+      Map<String, dynamic> nacionalidad_map = map['mod_nacionalidad'];
       nacionalidad_id = Parse.getInt(nacionalidad_map['id']);
       nacionalidad_idApi = Parse.getInt(nacionalidad_map['id']);
     }else{
       id = Parse.getInt(map['id']);
       idApi = Parse.getInt(map['idApi']);
 
-      Map<String, dynamic> sexo_map = map['sexo'];
+      Map<String, dynamic> sexo_map = map['mod_sexo'];
       sexo_id = Parse.getInt(sexo_map['id']);
       sexo_idApi = Parse.getInt(sexo_map['idApi']);
 
@@ -180,7 +180,7 @@ class Persona extends DbObj {
       estadoCivil_id = Parse.getInt(estadoCivil_map['id']);
       estadoCivil_idApi = Parse.getInt(estadoCivil_map['idApi']);
 
-      Map<String, dynamic> nacionalidad_map = map['nacionalidad'];
+      Map<String, dynamic> nacionalidad_map = map['mod_nacionalidad'];
       nacionalidad_id = Parse.getInt(nacionalidad_map['id']);
       nacionalidad_idApi = Parse.getInt(nacionalidad_map['idApi']);
     }
@@ -229,12 +229,12 @@ class Persona extends DbObj {
     dtReg: DateTime(1995,04,14,12,34,56,7890),
     idPersReg: 1,
     estado: -100,
-    nombre1: 'Christian',
-    nombre2: 'Eduardo',
-    apellido1: 'Gonzalez',
-    apellido2: 'Espinoza',
+    nombre1: 'empty',
+    nombre2: 'empty',
+    apellido1: 'empty',
+    apellido2: 'empty',
     fechaNacimiento: DateTime(1995,04,14,12,34,56,7890),
-    cedula: '0931977912',
+    cedula: '0000000000',
     sexo: Sexo.empty(),
     estadoCivil: EstadoCivil.empty(),
     nacionalidad: Nacionalidad.empty(),
@@ -244,5 +244,10 @@ class Persona extends DbObj {
 
   static Persona empty(){
     return _empty;
+  }
+
+  @override
+  String getValueStr(){
+    return nombresApellidos();
   }
 }

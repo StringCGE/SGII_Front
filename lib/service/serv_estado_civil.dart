@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sgii_front/util/common/result.dart';
 import 'package:sgii_front/util/my_widget/config.dart';
 
-import 'package:sgii_front/model/basicos/cls_estado_civil.dart';
+import 'package:sgii_front/model/cls_estado_civil.dart';
 
 class EstadoCivilService {
   static final EstadoCivilService _singleton = EstadoCivilService._internal();
@@ -63,7 +63,7 @@ class EstadoCivilService {
   }
   Future<ResultOf<EstadoCivil>> _getItemById_Api(int id) async {
     try{
-      final url = Uri.parse('${Config.url}/api/EstadoCivil/${id}');
+      final url = Uri.parse('${Config.urlApi}/api/EstadoCivil/${id}');
       final response = await http.get(
         url,
         headers: {
@@ -120,7 +120,7 @@ class EstadoCivilService {
     value.local = 0;
     Map<String, dynamic> map = value.toMap();
     final response = await http.post(
-      Uri.parse('${Config.url}/api/EstadoCivil'), // Cambia el endpoint según tu API
+      Uri.parse('${Config.urlApi}/api/EstadoCivil'), // Cambia el endpoint según tu API
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -166,7 +166,7 @@ class EstadoCivilService {
   Future<Result> _updateItem_Api(EstadoCivil value) async {
     value.local = 0;
     final response = await http.put(
-      Uri.parse('${Config.url}/api/EstadoCivil/${value.id}'),
+      Uri.parse('${Config.urlApi}/api/EstadoCivil/${value.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -206,7 +206,7 @@ class EstadoCivilService {
   Future<ResultOf<List<EstadoCivil>>> _fetchData_Api(DateTime offset, int take, String? nombre) async {
     String fecha = Parse.getDatetimeToStringFromQuery(offset);
 
-    StringBuffer urlBuilder = StringBuffer('${Config.url}/api/EstadoCivil?offsetDT=$fecha&take=$take');
+    StringBuffer urlBuilder = StringBuffer('${Config.urlApi}/api/EstadoCivil?offsetDT=$fecha&take=$take');
     if (nombre != null && nombre.isNotEmpty) {
       urlBuilder.write('&nombre=$nombre');
     }
@@ -313,7 +313,7 @@ class EstadoCivilService {
   Future<bool> _isConnectedToInternet() async {
     if (kIsWeb) {
       try {
-        final response = await http.get(Uri.parse('${Config.url}/api/Status'));
+        final response = await http.get(Uri.parse('${Config.urlApi}/api/Status'));
         return response.statusCode == 200;
       } catch (e) {
         return false;

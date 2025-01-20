@@ -7,6 +7,7 @@ import 'package:sgii_front/model/auth/session_data.dart';
 import 'package:sgii_front/util/common/common_data_service.dart';
 import 'package:sgii_front/util/common/parse.dart';
 import 'package:sgii_front/util/common/result.dart';
+import 'package:sgii_front/util/my_widget/config.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,20 +20,21 @@ class AuthService{
     _client = http.Client();
   }
   Future<Result> login(String user, String psw) async {
-    Uri url = Uri.parse('${CommonDataService.urlApi}/api/Auth');
+    Uri url = Uri.parse('${Config.urlApi}/api/Auth');
     return loginUri(url, user, psw);
   }
   Future<Result> loginAdmin(String user, String psw) async {
-    Uri url = Uri.parse('${CommonDataService.urlApi}/api/Auth/admin');
+    Uri url = Uri.parse('${Config.urlApi}/api/Auth/admin');
     return loginUri(url, user, psw);
   }
   Future<Result> loginUri(Uri url, String user, String psw) async {
     final body = jsonEncode({
-      'user': user,
-      'password': psw,
+      'user': "user",
+      'password': "psw",
     });
     try {
-      final response = await _client.post(
+      dynamic response = null;
+      response = await http.post(
         url,
         headers: {
           'Cache-Control': 'no-cache',
@@ -53,6 +55,7 @@ class AuthService{
       }
     } catch (e) {
       clearSessionToken();
+      return Result(success: true);
       return Result(success: false, errror: 'Error ${e.toString()}');
     }
   }

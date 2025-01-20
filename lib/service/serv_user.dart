@@ -7,32 +7,33 @@ import 'package:flutter/foundation.dart';
 import 'package:sgii_front/util/common/result.dart';
 import 'package:sgii_front/util/my_widget/config.dart';
 
-import 'package:sgii_front/model/cls_nacionalidad.dart';
+import 'package:sgii_front/model/cls_user.dart';
 
-class NacionalidadService {
-  static final NacionalidadService _singleton = NacionalidadService._internal();
-  static const String _cacheKey = 'value_cache_Nacionalidad';
+class UserService {
+  static final UserService _singleton = UserService._internal();
+  static const String _cacheKey = 'value_cache_User';
 
-  List<Nacionalidad> _lItem = [];
+  List<User> _lItem = [];
 
-  NacionalidadService._internal();
+  UserService._internal();
 
-  factory NacionalidadService() {
+  factory UserService() {
     return _singleton;
   }
 
-  List<Nacionalidad> get lItem => _lItem;
-  Future<Nacionalidad> directGetItemById(int id, int idApi) async {
-    ResultOf<Nacionalidad> result = await getItemById(id, idApi);
+  List<User> get lItem => _lItem;
+  Future<User> directGetItemById(int id, int idApi) async {
+    ResultOf<User> result = await getItemById(id, idApi);
     if (!result.success){
-      return Nacionalidad.empty();
+      return User.empty();
     }
     if (result.value == null){
-      return Nacionalidad.empty();
+      return User.empty();
     }
     return result.value!;
   }
-  Future<ResultOf<Nacionalidad>> getItemById(int id, int idApi) async {
+
+  Future<ResultOf<User>> getItemById(int id, int idApi) async {
     if (await _isConnectedToInternet()) {
       return _getItemById_Api(idApi);
     } else {
@@ -40,30 +41,30 @@ class NacionalidadService {
       return await _getItemById_Cache(id);
     }
   }
-  Future<ResultOf<Nacionalidad>> _getItemById_Cache(int id) async {
+  Future<ResultOf<User>> _getItemById_Cache(int id) async {
     try{
-      Nacionalidad existe = _lItem.firstWhere(
+      User existe = _lItem.firstWhere(
             (c) => c.id == id,
-        orElse: () => Nacionalidad.empty(),
+        orElse: () => User.empty(),
       );
-      return ResultOf<Nacionalidad>(
+      return ResultOf<User>(
         success: true,
-        message: "",
-        errror: "",
+        message: '',
+        errror: '',
         value: existe,
       );
     }catch(e){
-      return ResultOf<Nacionalidad>(
+      return ResultOf<User>(
         success: false,
-        message: "",
-        errror: "",
+        message: '',
+        errror: '',
         e: e,
       );
     }
   }
-  Future<ResultOf<Nacionalidad>> _getItemById_Api(int id) async {
+  Future<ResultOf<User>> _getItemById_Api(int id) async {
     try{
-      final url = Uri.parse('${Config.urlApi}/api/Nacionalidad/${id}');
+      final url = Uri.parse('${Config.urlApi}/api/User/${id}');
       final response = await http.get(
         url,
         headers: {
@@ -72,27 +73,27 @@ class NacionalidadService {
       );
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        Nacionalidad value = await Nacionalidad.fromMap(data, true);
-        List<Nacionalidad> list = [value];
+        User value = await User.fromMap(data, true);
+        List<User> list = [value];
         _actualizarList(list, 0);
-        return ResultOf<Nacionalidad>(
+        return ResultOf<User>(
           success: true,
           value: list[0],
-          message: "Nacionalidad leido correctamente",
-          errror: "",
+          message: 'User leido correctamente',
+          errror: '',
         );
       } else {
-        return ResultOf<Nacionalidad>(
+        return ResultOf<User>(
           success: false,
-          message: "",
-          errror: "Error al leer Nacionalidad",
+          message: '',
+          errror: 'Error al leer User',
         );
       }
     }catch(e){
-      return ResultOf<Nacionalidad>(
+      return ResultOf<User>(
         success: false,
-        message: "",
-        errror: "Error al leer Nacionalidad",
+        message: '',
+        errror: 'Error al leer User',
         e: e,
       );
     }
@@ -100,27 +101,27 @@ class NacionalidadService {
   }
 
 
-  Future<Result> createItem(Nacionalidad value) async {
+  Future<Result> createItem(User value) async {
     if (await _isConnectedToInternet()) {
       return _createItem_Api(value);
     } else {
       return await _createItem_Cache(value);
     }
   }
-  Future<Result> _createItem_Cache(Nacionalidad value) async {
+  Future<Result> _createItem_Cache(User value) async {
     value.local = 1;
     lItem.add(value);
     return Result(
       success: true,
-      message: "",
-      errror: "",
+      message: '',
+      errror: '',
     );
   }
-  Future<Result> _createItem_Api(Nacionalidad value) async {
+  Future<Result> _createItem_Api(User value) async {
     value.local = 0;
     Map<String, dynamic> map = value.toMap();
     final response = await http.post(
-      Uri.parse('${Config.urlApi}/api/Nacionalidad'), // Cambia el endpoint según tu API
+      Uri.parse('${Config.urlApi}/api/User'), // Cambia el endpoint según tu API
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -129,18 +130,18 @@ class NacionalidadService {
     if (response.statusCode == 201) {
       return Result(
         success: true,
-        message: "Nacionalidad agregado correctamente",
-        errror: "",
+        message: 'User agregado correctamente',
+        errror: '',
       );
     } else {
       return Result(
         success: false,
-        message: "",
-        errror: "Error al agregar value",
+        message: '',
+        errror: 'Error al agregar User',
       );
     }
   }
-  Future<Result> deleteItem(Nacionalidad value) async {
+  Future<Result> deleteItem(User value) async {
     value.estado = 0;
     if (await _isConnectedToInternet()) {
       return _updateItem_Api(value);
@@ -148,25 +149,25 @@ class NacionalidadService {
       return await _updateItem_Cache(value);
     }
   }
-  Future<Result> updateItem(Nacionalidad value) async {
+  Future<Result> updateItem(User value) async {
     if (await _isConnectedToInternet()) {
       return _updateItem_Api(value);
     } else {
       return await _updateItem_Cache(value);
     }
   }
-  Future<Result> _updateItem_Cache(Nacionalidad value) async {
+  Future<Result> _updateItem_Cache(User value) async {
     value.local = 2;
     return Result(
       success: true,
-      message: "Nacionalidad actualizado correctamente.",
-      errror: "",
+      message: 'User actualizado correctamente.',
+      errror: '',
     );
   }
-  Future<Result> _updateItem_Api(Nacionalidad value) async {
+  Future<Result> _updateItem_Api(User value) async {
     value.local = 0;
     final response = await http.put(
-      Uri.parse('${Config.urlApi}/api/Nacionalidad/${value.id}'),
+      Uri.parse('${Config.urlApi}/api/User/${value.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -175,19 +176,19 @@ class NacionalidadService {
     if (response.statusCode == 200) {
       return Result(
         success: true,
-        message: "Nacionalidad actualizado correctamente",
-        errror: "",
+        message: 'User actualizado correctamente',
+        errror: '',
       );
     } else {
       return Result(
         success: false,
-        message: "",
-        errror: "Error al actualizar persona",
+        message: '',
+        errror: 'Error al actualizar persona',
       );
     }
   }
 
-  Future<ResultOf<List<Nacionalidad>>> fetchData(DateTime offset, int take, {bool forceRefresh = false}) async {
+  Future<ResultOf<List<User>>> fetchData(DateTime offset, int take, {bool forceRefresh = false}) async {
     if (await _isConnectedToInternet() || forceRefresh) {
       return _fetchData_Api(offset, take, null);
     } else {
@@ -195,7 +196,7 @@ class NacionalidadService {
     }
   }
 
-  Future<ResultOf<List<Nacionalidad>>> fetchDataFind(DateTime offset, int take, String? nombre, {bool forceRefresh = false}) async {
+  Future<ResultOf<List<User>>> fetchDataFind(DateTime offset, int take, String? nombre, {bool forceRefresh = false}) async {
     if (await _isConnectedToInternet() || forceRefresh) {
       return _fetchData_Api(offset, take, nombre);
     } else {
@@ -203,10 +204,10 @@ class NacionalidadService {
     }
   }
 
-  Future<ResultOf<List<Nacionalidad>>> _fetchData_Api(DateTime offset, int take, String? nombre) async {
+  Future<ResultOf<List<User>>> _fetchData_Api(DateTime offset, int take, String? nombre) async {
     String fecha = Parse.getDatetimeToStringFromQuery(offset);
 
-    StringBuffer urlBuilder = StringBuffer('${Config.urlApi}/api/Nacionalidad?offsetDT=$fecha&take=$take');
+    StringBuffer urlBuilder = StringBuffer('${Config.urlApi}/api/User?offsetDT=$fecha&take=$take');
     if (nombre != null && nombre.isNotEmpty) {
       urlBuilder.write('&nombre=$nombre');
     }
@@ -215,8 +216,8 @@ class NacionalidadService {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        List<Nacionalidad> nuevosItem = await Future.wait(
-            data.map((item) => Nacionalidad.fromMap(item, true))
+        List<User> nuevosItem = await Future.wait(
+            data.map((item) => User.fromMap(item, true))
         );
         bool seActualizaCache = false;
         for (int i = 0; i < nuevosItem.length; i++) {
@@ -226,35 +227,35 @@ class NacionalidadService {
           _sFromCache();
         }
 
-        return ResultOf<List<Nacionalidad>>(
+        return ResultOf<List<User>>(
           success: true,
-          message: "",
-          errror: "",
+          message: '',
+          errror: '',
           value: nuevosItem,
         );
       } else {
-        return ResultOf<List<Nacionalidad>>(
+        return ResultOf<List<User>>(
           success: false,
-          message: "",
-          errror: "Error al obtener datos del API",
+          message: '',
+          errror: 'Error al obtener datos del API',
           value: [],
           e: null,
         );
       }
     } catch (e) {
-      return ResultOf<List<Nacionalidad>>(
+      return ResultOf<List<User>>(
         success: false,
-        message: "",
-        errror: "Error al obtener datos del API",
+        message: '',
+        errror: 'Error al obtener datos del API',
         value: [],
         e: e,
       );
     }
   }
 
-  Future<ResultOf<List<Nacionalidad>>> _fetchData_Cache(DateTime offset, int take, String? nombre) async {
+  Future<ResultOf<List<User>>> _fetchData_Cache(DateTime offset, int take, String? nombre) async {
     await _lFromCache();
-    List<Nacionalidad> filteredItems = _lItem
+    List<User> filteredItems = _lItem
         .where((value) {
       bool fechaValida = value.dtReg.isBefore(offset) && !value.dtReg.isAtSameMomentAs(offset);
       bool nombreValido = true;
@@ -267,24 +268,24 @@ class NacionalidadService {
     }).toList();
 
     filteredItems.sort((a, b) => b.dtReg.compareTo(a.dtReg));
-    List<Nacionalidad> items_ = filteredItems.take(take).toList();
-    return ResultOf<List<Nacionalidad>>(
+    List<User> items_ = filteredItems.take(take).toList();
+    return ResultOf<List<User>>(
       success: true,
-      message: "",
-      errror: "",
+      message: '',
+      errror: '',
       value: items_,
       e: null,
     );
   }
 
 
-  Future<List<Nacionalidad>> _loadFromCache() async {
+  Future<List<User>> _loadFromCache() async {
     final prefs = await SharedPreferences.getInstance();
     final cachedData = prefs.getString(_cacheKey);
     if (cachedData != null) {
       final List<dynamic> jsonData = json.decode(cachedData);
-      List<Nacionalidad> nuevosItem = await Future.wait(
-          jsonData.map((item) => Nacionalidad.fromMap(item, false))
+      List<User> nuevosItem = await Future.wait(
+          jsonData.map((item) => User.fromMap(item, false))
       );
       return nuevosItem;
     } else {
@@ -299,7 +300,7 @@ class NacionalidadService {
     _lItem = await _loadFromCache();
     _dataLoaded = true;
   }
-  Future<void> _saveToCache(List<Nacionalidad> lVals) async {
+  Future<void> _saveToCache(List<User> lVals) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonData = json.encode(lVals.map((e) => e.toMap()).toList());
     await prefs.setString(_cacheKey, jsonData);
@@ -307,7 +308,7 @@ class NacionalidadService {
   Future<void> _sFromCache() async {
     await _saveToCache(_lItem);
   }
-  void updateLocalData(List<Nacionalidad> lVals) {
+  void updateLocalData(List<User> lVals) {
     _lItem = lVals;
   }
   Future<bool> _isConnectedToInternet() async {
@@ -327,7 +328,7 @@ class NacionalidadService {
       }
     }
   }
-  Future<bool> _actualizarList(List<Nacionalidad> nuevosItem, int i) async {//Map<String, dynamic>
+  Future<bool> _actualizarList(List<User> nuevosItem, int i) async {//Map<String, dynamic>
     var nuevo = nuevosItem[i];
     int index = _lItem.indexWhere((value) => value.idApi == nuevo.idApi);
     if (index != -1) {

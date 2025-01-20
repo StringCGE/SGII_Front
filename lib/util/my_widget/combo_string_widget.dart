@@ -102,7 +102,7 @@ class ComboStringWidgetState extends State<ComboStringWidget> {
 
 ComboStringWidget(
     controller: _sexoController,
-    labelText: "sexo",
+    labelText: "mod_sexo",
     hintText: "Escriba la cedula",
     validator: validateNotEmpty,
     lista: ["Masculino", "Femenino", "Si no te identificas por genitales, las audas medicas no estan permitidas"]

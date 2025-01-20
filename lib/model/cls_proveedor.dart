@@ -4,6 +4,7 @@ import 'package:sgii_front/service/serv_persona.dart';
 import 'package:sgii_front/util/common/parse.dart';
 
 class Proveedor extends DbObj {
+
   String razonSocial;
   String ruc;
   Persona responsable;
@@ -14,11 +15,6 @@ class Proveedor extends DbObj {
   String email;
 
   Proveedor({
-    required super.id,
-    required super.idApi,
-    required super.dtReg,
-    required super.idPersReg,
-    required super.estado,
     required this.razonSocial,
     required this.ruc,
     required this.responsable,
@@ -27,99 +23,110 @@ class Proveedor extends DbObj {
     required this.telefono1,
     required this.telefono2,
     required this.email,
+    required super.id,
+    required super.idApi,
+    required super.dtReg,
+    required super.idPersReg,
+    required super.estado,
   });
 
   @override
   String toString() {
-    return 'Proveedor: Razón Social - $razonSocial, RUC - $ruc, Responsable - ${responsable.nombresApellidos()}, Tel. Responsable - $telefonoResponsable, Dirección - $direccionMatriz, Tel.1 - $telefono1, Tel.2 - $telefono2, Email - $email';
+    return 'Proveedor';
   }
 
   static Future<Proveedor> fromMap(Map<String, dynamic> map, bool fromApi) async {
-    int id = Parse.getInt(map['id']);
-    int idApi = Parse.getInt(map['idApi']);
-
-    int responsableId = -1;
-    int responsableIdApi = -1;
+    int id = -1;
+    int idApi = -1;
+    int responsable_id = -1;
+    int responsable_idApi = -1;
 
     if (fromApi) {
       idApi = Parse.getInt(map['id']);
-      responsableIdApi = Parse.getInt(map['responsable_id']);
+
+      Map<String, dynamic> responsable_map = map['responsable'];
+      responsable_id = Parse.getInt(responsable_map['id']);
+      responsable_idApi = Parse.getInt(responsable_map['id']);
+      
     } else {
       id = Parse.getInt(map['id']);
       idApi = Parse.getInt(map['idApi']);
 
-      Map<String, dynamic> responsableMap = map['responsable'];
-      responsableId = Parse.getInt(responsableMap['id']);
-      responsableIdApi = Parse.getInt(responsableMap['idApi']);
+      Map<String, dynamic> responsable_map = map['responsable'];
+      responsable_id = Parse.getInt(responsable_map['id']);
+      responsable_idApi = Parse.getInt(responsable_map['idApi']);
+      
     }
 
+    String razonSocial = Parse.getString(map['razonSocial']);
+    String ruc = Parse.getString(map['ruc']);
+    String telefonoResponsable = Parse.getString(map['telefonoResponsable']);
+    String direccionMatriz = Parse.getString(map['direccionMatriz']);
+    String telefono1 = Parse.getString(map['telefono1']);
+    String telefono2 = Parse.getString(map['telefono2']);
+    String email = Parse.getString(map['email']);
+    //DateTime? dtReg = map['dtReg'] != null
+      //? DateTime.parse(map['dtReg'])
+      //: null;
     DateTime dtReg = Parse.getDateTime(map['dtReg']);
     int idPersReg = Parse.getInt(map['idPersReg']);
     int estado = Parse.getInt(map['estado']);
 
-    String razonSocial = map['razonSocial'] ?? '';
-    String ruc = map['ruc'] ?? '';
-    String telefonoResponsable = map['telefonoResponsable'] ?? '';
-    String direccionMatriz = map['direccionMatriz'] ?? '';
-    String telefono1 = map['telefono1'] ?? '';
-    String telefono2 = map['telefono2'] ?? '';
-    String email = map['email'] ?? '';
-
     return Proveedor(
-      id: id,
-      idApi: idApi,
-      dtReg: dtReg,
-      idPersReg: idPersReg,
-      estado: estado,
       razonSocial: razonSocial,
       ruc: ruc,
-      responsable: await PersonaService().directGetItemById(responsableId, responsableIdApi),
+      responsable: await PersonaService().directGetItemById(responsable_id, responsable_idApi),
       telefonoResponsable: telefonoResponsable,
       direccionMatriz: direccionMatriz,
       telefono1: telefono1,
       telefono2: telefono2,
       email: email,
+      id: id,
+      idApi: idApi,
+      dtReg: dtReg,
+      idPersReg: idPersReg,
+      estado: estado,
     );
   }
 
   Future<void> setFromMap(Map<String, dynamic> map, bool fromApi) async {
-    int responsableId = -1;
-    int responsableIdApi = -1;
+    int responsable_id = -1;
+    int responsable_idApi = -1;
+
 
     if (fromApi) {
-      idApi = Parse.getInt(map['id']);
-      responsableIdApi = Parse.getInt(map['responsable_id']);
-    } else {
-      id = Parse.getInt(map['id']);
-      idApi = Parse.getInt(map['idApi']);
+      this.idApi = Parse.getInt(map['id']);
 
-      Map<String, dynamic> responsableMap = map['responsable'];
-      responsableId = Parse.getInt(responsableMap['id']);
-      responsableIdApi = Parse.getInt(responsableMap['idApi']);
+      Map<String, dynamic> responsable_map = map['responsable'];
+      responsable_id = Parse.getInt(responsable_map['id']);
+      responsable_idApi = Parse.getInt(responsable_map['id']);
+      
+    } else {
+      this.id = Parse.getInt(map['id']);
+      this.idApi = Parse.getInt(map['idApi']);
+
+      Map<String, dynamic> responsable_map = map['responsable'];
+      responsable_id = Parse.getInt(responsable_map['id']);
+      responsable_idApi = Parse.getInt(responsable_map['idApi']);
+      
     }
 
-    dtReg = Parse.getDateTime(map['dtReg']);
-    idPersReg = Parse.getInt(map['idPersReg']);
-    estado = Parse.getInt(map['estado']);
-
-    razonSocial = map['razonSocial'] ?? '';
-    ruc = map['ruc'] ?? '';
-    telefonoResponsable = map['telefonoResponsable'] ?? '';
-    direccionMatriz = map['direccionMatriz'] ?? '';
-    telefono1 = map['telefono1'] ?? '';
-    telefono2 = map['telefono2'] ?? '';
-    email = map['email'] ?? '';
-
-    responsable = await PersonaService().directGetItemById(responsableId, responsableIdApi);
+      this.razonSocial = razonSocial;
+      this.ruc = ruc;
+      this.responsable = await PersonaService().directGetItemById(responsable_id, responsable_idApi);
+      this.telefonoResponsable = telefonoResponsable;
+      this.direccionMatriz = direccionMatriz;
+      this.telefono1 = telefono1;
+      this.telefono2 = telefono2;
+      this.email = email;
+      this.dtReg = dtReg;
+      this.idPersReg = idPersReg;
+      this.estado = estado;
   }
 
+  @override
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'idApi': idApi,
-      'dtReg': dtReg.toIso8601String(),
-      'idPersReg': idPersReg,
-      'estado': estado,
       'razonSocial': razonSocial,
       'ruc': ruc,
       'responsable': responsable.toMap(),
@@ -128,26 +135,37 @@ class Proveedor extends DbObj {
       'telefono1': telefono1,
       'telefono2': telefono2,
       'email': email,
+      'id': id,
+      'idApi': idApi,
+      'dtReg': dtReg.toIso8601String(),
+      'idPersReg': idPersReg,
+      'estado': estado,
     };
   }
 
-  static final Proveedor _empty = Proveedor(
+  static Proveedor _empty = Proveedor(
+    razonSocial : '',
+    ruc : '',
+    responsable: Persona.empty(),
+    telefonoResponsable : '',
+    direccionMatriz : '',
+    telefono1 : '',
+    telefono2 : '',
+    email : '',
     id: 1,
     idApi: 1,
     dtReg: DateTime(1995, 04, 14, 12, 34, 56, 7890),
     idPersReg: 1,
-    estado: -100, // Estado para objeto vacío
-    razonSocial: '',
-    ruc: '',
-    responsable: Persona.empty(),
-    telefonoResponsable: '',
-    direccionMatriz: '',
-    telefono1: '',
-    telefono2: '',
-    email: '',
+    estado: -100, // State for empty object
   );
 
+  @override
   static Proveedor empty() {
     return _empty;
+  }
+  
+  @override
+  String getValueStr(){
+    return razonSocial;
   }
 }

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sgii_front/util/common/result.dart';
 import 'package:sgii_front/util/my_widget/config.dart';
 
-import 'package:sgii_front/model/basicos/cls_sexo.dart';
+import 'package:sgii_front/model/cls_sexo.dart';
 
 class SexoService {
   static final SexoService _singleton = SexoService._internal();
@@ -63,7 +63,7 @@ class SexoService {
   }
   Future<ResultOf<Sexo>> _getItemById_Api(int id) async {
     try{
-      final url = Uri.parse('${Config.url}/api/Sexo/${id}');
+      final url = Uri.parse('${Config.urlApi}/api/Sexo/${id}');
       final response = await http.get(
         url,
         headers: {
@@ -120,7 +120,7 @@ class SexoService {
     value.local = 0;
     Map<String, dynamic> map = value.toMap();
     final response = await http.post(
-      Uri.parse('${Config.url}/api/Sexo'), // Cambia el endpoint según tu API
+      Uri.parse('${Config.urlApi}/api/Sexo'), // Cambia el endpoint según tu API
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -167,7 +167,7 @@ class SexoService {
     value.local = 0;
     Map<String, dynamic> map = value.toMap();
     final response = await http.put(
-      Uri.parse('${Config.url}/api/Sexo/${value.id}'),
+      Uri.parse('${Config.urlApi}/api/Sexo/${value.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -207,7 +207,7 @@ class SexoService {
   Future<ResultOf<List<Sexo>>> _fetchData_Api(DateTime offset, int take, String? nombre) async {
     String fecha = Parse.getDatetimeToStringFromQuery(offset);
 
-    StringBuffer urlBuilder = StringBuffer('${Config.url}/api/Sexo?offsetDT=$fecha&take=$take');
+    StringBuffer urlBuilder = StringBuffer('${Config.urlApi}/api/Sexo?offsetDT=$fecha&take=$take');
     if (nombre != null && nombre.isNotEmpty) {
       urlBuilder.write('&nombre=$nombre');
     }
@@ -317,7 +317,7 @@ class SexoService {
   Future<bool> _isConnectedToInternet() async {
     if (kIsWeb) {
       try {
-        final response = await http.get(Uri.parse('${Config.url}/api/Status'));
+        final response = await http.get(Uri.parse('${Config.urlApi}/api/Status'));
         return response.statusCode == 200;
       } catch (e) {
         return false;

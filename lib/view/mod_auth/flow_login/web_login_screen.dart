@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sgii_front/model/estado.dart';
+import 'package:sgii_front/util/common/nav.dart';
 import 'package:sgii_front/util/my_widget/main_logon_widget.dart';
 import 'package:sgii_front/util/my_widget/menu_opcions.dart';
 
@@ -91,35 +92,44 @@ class WebLoginScreenState extends State<WebLoginScreen> {
                             SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MainLogonWidget(
-                                      menuOptions: MenuOptions(),
+                                Nav.navDropAll(
+                                    context: context,
+                                    next: () => MainLogonWidget(
+                                      //menuOptions: MenuOptions(roles: ['admin']),
+                                      //menuOptions: MenuOptions(roles: ['gerente']),
+                                      //menuOptions: MenuOptions(roles: ['inventario']),
+                                      //menuOptions: MenuOptions(roles: ['cajero']),
+                                      menuOptions: MenuOptions(roles: ['admin', 'gerente', 'inventario', 'cajero']),
                                       child: Text("Hoooola"),
                                     ),
-                                  ),
+                                    settingName: 'MainLogonWidget',
+                                    settingArg: null
                                 );
-                                /*Estado().cLogin.loginAdmin(
+                                /*Estado().cLogin.login(
                                     context: context,
                                     user: tecUser.text,
                                     psw: tecPsw.text,
                                     onLogin: (){
-                                      Navigator.push(
+                                      String role = Estado().cLogin.sAuth.sessionData!.usuario.role; //Que rico spageti
+                                      /*Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MainLogonWidget(
-                                              menuOptions: MenuOptions(),
-                                              child: Text("Hoooola"),
-                                          ),
+                                          builder: (context) =>
                                         ),
-                                      );
-                                      /*Nav.navDropAll(
-                                          context: context,
-                                          next: () => HomeWebScreen(),
-                                          settingName: 'HomeWebScreen',
-                                          settingArg: null
                                       );*/
+                                      Nav.navDropAll(
+                                          context: context,
+                                          next: () => MainLogonWidget(
+                                            //menuOptions: MenuOptions(roles: ['admin']),
+                                            //menuOptions: MenuOptions(roles: ['gerente']),
+                                            //menuOptions: MenuOptions(roles: ['inventario']),
+                                            //menuOptions: MenuOptions(roles: ['cajero']),
+                                            menuOptions: MenuOptions(roles: ['admin', 'gerente', 'inventario', 'cajero']),
+                                            child: Text("Hoooola"),
+                                          ),
+                                          settingName: 'MainLogonWidget',
+                                          settingArg: null
+                                      );
                                     }
                                 );*/
                               },

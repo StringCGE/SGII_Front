@@ -18,8 +18,10 @@ class Sexo extends DbObj {
     return 'Sexo: $nombre';
   }
 
-  String getValue(){
-    return '$nombre';
+
+  @override
+  String getValueStr(){
+    return nombre;
   }
 
   static Future<Sexo> fromMap(Map<String, dynamic> map, bool fromApi) async {

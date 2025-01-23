@@ -4,18 +4,24 @@ import 'package:sgii_front/service/serv_persona.dart';
 import 'package:sgii_front/util/common/info.dart';
 import 'package:sgii_front/util/common/parse.dart';
 import 'package:sgii_front/util/common/result.dart';
+import 'package:sgii_front/util/my_widget/bool_widget.dart';
+import 'package:sgii_front/util/my_widget/dinero_widget.dart';
+import 'package:sgii_front/util/my_widget/num_widget.dart';
 import 'package:sgii_front/util/my_widget/date_widget.dart';
 import 'package:sgii_front/util/my_widget/text_widget.dart';
 
 import 'package:sgii_front/model/cls_sexo.dart';
 import 'package:sgii_front/service/serv_sexo.dart';
 import 'package:sgii_front/view/mod_sexo/combo_sexo_widget.dart';
+import 'package:sgii_front/view/mod_sexo/single_pick_list_sexo_widget.dart';
 import 'package:sgii_front/model/cls_estado_civil.dart';
 import 'package:sgii_front/service/serv_estado_civil.dart';
 import 'package:sgii_front/view/mod_estado_civil/combo_estado_civil_widget.dart';
+import 'package:sgii_front/view/mod_estado_civil/single_pick_list_estado_civil_widget.dart';
 import 'package:sgii_front/model/cls_nacionalidad.dart';
 import 'package:sgii_front/service/serv_nacionalidad.dart';
 import 'package:sgii_front/view/mod_nacionalidad/combo_nacionalidad_widget.dart';
+import 'package:sgii_front/view/mod_nacionalidad/single_pick_list_nacionalidad_widget.dart';
 
 class CreateEditPersonaWidget extends StatefulWidget {
   final Persona? item;
@@ -52,6 +58,8 @@ class CreateEditPersonaWidgetState extends State<CreateEditPersonaWidget> {
   final TextEditingController _apellido1Controller = TextEditingController();
   final TextEditingController _apellido2Controller = TextEditingController();
   final TextEditingController _fechaNacimientoController = TextEditingController();
+
+
   final TextEditingController _cedulaController = TextEditingController();
   final TextEditingController _sexoController = TextEditingController();
   final TextEditingController _estadoCivilController = TextEditingController();
@@ -71,20 +79,21 @@ class CreateEditPersonaWidgetState extends State<CreateEditPersonaWidget> {
   Future<void> fillEditableFields(Persona? item) async {
     this.item = item;
     if (this.item != null){
-      _nombre1Controller.text = this.item!.nombre1;
-      _nombre2Controller.text = this.item!.nombre2;
-      _apellido1Controller.text = this.item!.apellido1;
-      _apellido2Controller.text = this.item!.apellido2;
+      _nombre1Controller.text = Parse.getString(this.item!.nombre1);
+      _nombre2Controller.text = Parse.getString(this.item!.nombre2);
+      _apellido1Controller.text = Parse.getString(this.item!.apellido1);
+      _apellido2Controller.text = Parse.getString(this.item!.apellido2);
       _fechaNacimientoController.text = this.item!.fechaNacimiento.toIso8601String();
-      _cedulaController.text = this.item!.cedula;
+          //_fechaNacimientoController.text = Parse.getDateTime(_fechaNacimientoController.text);
+      _cedulaController.text = Parse.getString(this.item!.cedula);
       sexoSelect = this.item!.sexo;
       _sexoController.text = this.item!.sexo.getValueStr();
       estadoCivilSelect = this.item!.estadoCivil;
       _estadoCivilController.text = this.item!.estadoCivil.getValueStr();
       nacionalidadSelect = this.item!.nacionalidad;
       _nacionalidadController.text = this.item!.nacionalidad.getValueStr();
-      _grupoSanguineoController.text = this.item!.grupoSanguineo;
-      _tipoSanguineoController.text = this.item!.tipoSanguineo;
+      _grupoSanguineoController.text = Parse.getString(this.item!.grupoSanguineo);
+      _tipoSanguineoController.text = Parse.getString(this.item!.tipoSanguineo);
 
     }
   }
@@ -219,13 +228,13 @@ class CreateEditPersonaWidgetState extends State<CreateEditPersonaWidget> {
                  validator: validateNotEmpty,
                ),
                SizedBox(height: 16),
-                    DateWidget(
-                      controller: _fechaNacimientoController,
-                      labelText: 'FechaNacimiento',
-                      hintText: 'Seleccione la fecha de FechaNacimiento',
-                      validator: validateNotEmpty,
-                    ),
-                    SizedBox(height: 16),
+               DateWidget(
+                 controller: _fechaNacimientoController,
+                 labelText: 'FechaNacimiento',
+                 hintText: 'Seleccione la fecha de FechaNacimiento',
+                 validator: validateNotEmpty,
+               ),
+               SizedBox(height: 16),
                TextWidget(
                  controller: _cedulaController,
                  labelText: 'Cedula',
@@ -233,33 +242,33 @@ class CreateEditPersonaWidgetState extends State<CreateEditPersonaWidget> {
                  validator: validateNotEmpty,
                ),
                SizedBox(height: 16),
-                    ComboSexoWidget(
-                      getItem: () {
-                        return sexoSelect;
-                      },
-                      setItem: (Sexo? item) {
-                        sexoSelect = item ?? Sexo.empty();
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    ComboEstadoCivilWidget(
-                      getItem: () {
-                        return estadoCivilSelect;
-                      },
-                      setItem: (EstadoCivil? item) {
-                        estadoCivilSelect = item ?? EstadoCivil.empty();
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    ComboNacionalidadWidget(
-                      getItem: () {
-                        return nacionalidadSelect;
-                      },
-                      setItem: (Nacionalidad? item) {
-                        nacionalidadSelect = item ?? Nacionalidad.empty();
-                      },
-                    ),
-                    SizedBox(height: 16),
+               ComboSexoWidget(
+                 getItem: () {
+                   return sexoSelect;
+                 },
+                 setItem: (Sexo? item) {
+                   sexoSelect = item ?? Sexo.empty();
+                 },
+               ),
+               SizedBox(height: 16),
+               ComboEstadoCivilWidget(
+                 getItem: () {
+                   return estadoCivilSelect;
+                 },
+                 setItem: (EstadoCivil? item) {
+                   estadoCivilSelect = item ?? EstadoCivil.empty();
+                 },
+               ),
+               SizedBox(height: 16),
+               ComboNacionalidadWidget(
+                 getItem: () {
+                   return nacionalidadSelect;
+                 },
+                 setItem: (Nacionalidad? item) {
+                   nacionalidadSelect = item ?? Nacionalidad.empty();
+                 },
+               ),
+               SizedBox(height: 16),
                TextWidget(
                  controller: _grupoSanguineoController,
                  labelText: 'GrupoSanguineo',

@@ -37,7 +37,11 @@ class Parse{
       return value.toDouble();
     }
     if (value is String) {
-      return double.parse(value);
+      try{
+        return double.parse(value);
+      }catch(e){
+        return 0;
+      }
     }
     throw FormatException('Value is not a valid double: $value');
     //return 0.0;
@@ -179,7 +183,9 @@ class Parse{
   static num stringToNum(String? value) {
     return num.tryParse(value ?? '') ?? 0;
   }
-
+  static String boolToString(bool? value) {
+    return value?.toString() ?? '';
+  }
   static String intToString(int? value) {
     return value?.toString() ?? '';
   }

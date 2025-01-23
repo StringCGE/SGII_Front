@@ -3,6 +3,7 @@ import 'package:sgii_front/model/estado.dart';
 import 'package:sgii_front/util/common/nav.dart';
 import 'package:sgii_front/util/my_widget/main_logon_widget.dart';
 import 'package:sgii_front/util/my_widget/menu_opcions.dart';
+import 'package:sgii_front/view/mod_user/flow_crear_usuario/flow_01_crear_usuario_widget.dart';
 
 class WebLoginScreen extends StatefulWidget {
   @override
@@ -92,31 +93,12 @@ class WebLoginScreenState extends State<WebLoginScreen> {
                             SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {
-                                Nav.navDropAll(
-                                    context: context,
-                                    next: () => MainLogonWidget(
-                                      //menuOptions: MenuOptions(roles: ['admin']),
-                                      //menuOptions: MenuOptions(roles: ['gerente']),
-                                      //menuOptions: MenuOptions(roles: ['inventario']),
-                                      //menuOptions: MenuOptions(roles: ['cajero']),
-                                      menuOptions: MenuOptions(roles: ['admin', 'gerente', 'inventario', 'cajero']),
-                                      child: Text("Hoooola"),
-                                    ),
-                                    settingName: 'MainLogonWidget',
-                                    settingArg: null
-                                );
-                                /*Estado().cLogin.login(
+                                Estado().cLogin.login(
                                     context: context,
                                     user: tecUser.text,
                                     psw: tecPsw.text,
                                     onLogin: (){
-                                      String role = Estado().cLogin.sAuth.sessionData!.usuario.role; //Que rico spageti
-                                      /*Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                        ),
-                                      );*/
+                                      String role = Estado().cLogin.sAuth.sessionData!.usuario.role;
                                       Nav.navDropAll(
                                           context: context,
                                           next: () => MainLogonWidget(
@@ -131,7 +113,7 @@ class WebLoginScreenState extends State<WebLoginScreen> {
                                           settingArg: null
                                       );
                                     }
-                                );*/
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Estado().appStyle.webColorLoginButton,
@@ -147,12 +129,7 @@ class WebLoginScreenState extends State<WebLoginScreen> {
                               alignment: Alignment.centerRight,
                               child: TextButton(
                                 onPressed: () {
-                                  /*Nav.push(
-                                      context: context,
-                                      next: () => PswRecovery01AndroidScreen(),
-                                      settingName: 'PswRecovery01AndroidScreen',
-                                      settingArg: null
-                                  );*/
+
                                 },
                                 child: Text(
                                   'Olvidaste tu contraseña',
@@ -167,12 +144,12 @@ class WebLoginScreenState extends State<WebLoginScreen> {
                               alignment: Alignment.centerRight,
                               child: TextButton(
                                 onPressed: () {
-                                  /*Nav.push(
+                                  Nav.push(
                                       context: context,
-                                      next: () => PswRecovery01AndroidScreen(),
-                                      settingName: 'PswRecovery01AndroidScreen',
+                                      next: () => Flow01CrearUsuarioWidget(),
+                                      settingName: 'Flow01CrearUsuarioWidget',
                                       settingArg: null
-                                  );*/
+                                  );
                                 },
                                 child: Text(
                                   'Nuevo Usuario',

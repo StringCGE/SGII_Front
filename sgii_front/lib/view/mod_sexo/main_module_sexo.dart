@@ -35,8 +35,6 @@ class MainModuleSexoState extends State<MainModuleSexo> {
                 Column(
                   children: [
                     Text("Sexo"),
-                    Text("Permite administrar las opciones para el campo mod_sexo en otras areas"),
-                    Text("Sexo: es uan clasificacion del ser humano, mas no la orientacion sexual"),
                   ],
                 )
               ],

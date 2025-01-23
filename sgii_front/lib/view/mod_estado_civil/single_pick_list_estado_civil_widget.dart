@@ -11,12 +11,18 @@ import 'package:sgii_front/view/mod_estado_civil/item_estado_civil_widget.dart';
 
 
 class SinglePickListEstadoCivilWidget extends StatefulWidget {
-  EstadoCivil? Function() getItem;
-  void Function(EstadoCivil? item) setItem;
+  final EstadoCivil? Function() getItem;
+  final void Function(EstadoCivil? item) setItem;
+  final String labelText;
+  final String hintText;
+  final String addtext;
   SinglePickListEstadoCivilWidget({
     super.key,
     required this.getItem,
     required this.setItem,
+    required this.labelText,
+    required this.hintText,
+    required this.addtext,
   });
 
   @override
@@ -49,10 +55,10 @@ class SinglePickListEstadoCivilWidgetState extends State<SinglePickListEstadoCiv
   List<ItemList<DbObj>> lItemPickList = [];
   @override
   Widget build(BuildContext context) {
-    return PickListWidget(
+    return PickWidget(
         lItemPickList: lItemPickList,
-        labelText: 'EstadoCivil',
-        hintText: 'Seleccione una persona',
+        labelText: widget.labelText,
+        hintText: widget.hintText,
         validator: validateNotEmpty,
         filterList: (BuildContext context, Future<void> Function() onSetState) {
           return SearchListWidget<EstadoCivil>(
@@ -124,7 +130,7 @@ class SinglePickListEstadoCivilWidgetState extends State<SinglePickListEstadoCiv
                 context: context,
                 builder: (BuildContext alertDialogContext){
                   return AlertDialog(
-                    title: Text('Agregar EstadoCivil'),
+                    title: Text(widget.addtext),
                     content: CreateEditEstadoCivilWidget(
                         mostrarCancelar: true,
                         item:null,

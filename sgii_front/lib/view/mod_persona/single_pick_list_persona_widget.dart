@@ -3,6 +3,7 @@ import 'package:sgii_front/model/cls_000_db_obj.dart';
 import 'package:sgii_front/model/cls_persona.dart';
 import 'package:sgii_front/service/serv_persona.dart';
 import 'package:sgii_front/util/common/item_list.dart';
+import 'package:sgii_front/util/common/nav.dart';
 import 'package:sgii_front/util/common/result.dart';
 import 'package:sgii_front/util/my_widget/pick_list_widget.dart';
 import 'package:sgii_front/util/my_widget/search_list_widget.dart';
@@ -10,12 +11,18 @@ import 'package:sgii_front/view/mod_persona/create_edit_persona_widget.dart';
 import 'package:sgii_front/view/mod_persona/item_persona_widget.dart';
 
 class SinglePickListPersonaWidget extends StatefulWidget {
-  Persona? Function() getItem;
-  void Function(Persona? item) setItem;
+  final Persona? Function() getItem;
+  final void Function(Persona? item) setItem;
+  final String labelText;
+  final String hintText;
+  final String addtext;
   SinglePickListPersonaWidget({
     super.key,
     required this.getItem,
     required this.setItem,
+    required this.labelText,
+    required this.hintText,
+    required this.addtext,
   });
 
   @override
@@ -49,10 +56,10 @@ class SinglePickListPersonaWidgetState extends State<SinglePickListPersonaWidget
   List<ItemList<DbObj>> lItemPickList = [];
   @override
   Widget build(BuildContext context) {
-    return PickListWidget(
+    return PickWidget(
         lItemPickList: lItemPickList,
-        labelText: 'Persona',
-        hintText: 'Seleccione una persona',
+        labelText: widget.labelText,
+        hintText: widget.hintText,
         validator: validateNotEmpty,
         filterList: (BuildContext context, Future<void> Function() onSetState) {
           return SearchListWidget<Persona>(
@@ -124,14 +131,15 @@ class SinglePickListPersonaWidgetState extends State<SinglePickListPersonaWidget
                 context: context,
                 builder: (BuildContext alertDialogContext){
                   return AlertDialog(
-                    title: Text('Agregar Persona'),
+                    title: Text(widget.addtext),
                     content: CreateEditPersonaWidget(
                         mostrarCancelar: true,
                         item:null,
                         result: (Result r){
                           res = r;
                           if (r.success){
-                            Navigator.popUntil(alertDialogContext, (route) => route.isFirst);
+                            //Navigator.popUntil(alertDialogContext, (route) => route.isFirst);
+                            Nav.navPop(context: alertDialogContext);
                           }
                           //Navigator.of(context).pop();
                           //Navigator.pop(alertDialogContext);

@@ -5,7 +5,8 @@ class Result{
   final dynamic value;
   final bool success;
   final dynamic e;
-
+  final int intentos;
+  final bool usuarioBloqueado;
   Result({
     required this.success,
     this.errror = '',
@@ -13,6 +14,8 @@ class Result{
     this.statusCode = '',
     this.value = null,
     this.e = null,
+    this.intentos = -1,
+    this.usuarioBloqueado = false,
   });
 }
 

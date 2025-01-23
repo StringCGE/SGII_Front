@@ -23,10 +23,13 @@ class LoginController{
     cargando!.show();
     Result r = await sAuth.login(user, psw);
     if (r.success){
+      cargando!.hide();
       onLogin();
     }else{
       Info info = Info();
-      info.showErrorDialog(context, "Inicio de sesion fallido");
+      info.showErrorDialog(context, '''Inicio de sesion fallido
+Intentos = ${r.intentos}
+usuario bloqueado: ${r.usuarioBloqueado}''');
       //Info.toastFlotante("algo falta de completar o esta mal puesto");
       //Util.toastFlotante("Ah fallado el inicio de sesion");
       //Util.toastBarraAbajo(context, "Fallo el inicio de sesion");

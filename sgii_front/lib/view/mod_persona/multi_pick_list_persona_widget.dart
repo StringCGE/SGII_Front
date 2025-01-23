@@ -3,6 +3,7 @@ import 'package:sgii_front/model/cls_000_db_obj.dart';
 import 'package:sgii_front/model/cls_persona.dart';
 import 'package:sgii_front/service/serv_persona.dart';
 import 'package:sgii_front/util/common/item_list.dart';
+import 'package:sgii_front/util/common/nav.dart';
 import 'package:sgii_front/util/common/result.dart';
 import 'package:sgii_front/util/my_widget/pick_list_widget.dart';
 import 'package:sgii_front/util/my_widget/search_list_widget.dart';
@@ -50,7 +51,7 @@ class MultiPickListPersonaWidgetState extends State<MultiPickListPersonaWidget> 
     return PickListWidget(
       lItemPickList: lItemPickList,
       labelText: 'Persona',
-      hintText: 'Seleccione una persona',
+      hintText: 'Seleccione Persona',
       validator: validateNotEmpty,
       filterList: (BuildContext context, Future<void> Function() onSetState) {
         return SearchListWidget<Persona>(
@@ -135,7 +136,8 @@ class MultiPickListPersonaWidgetState extends State<MultiPickListPersonaWidget> 
                     result: (Result r){
                       res = r;
                       if (r.success){
-                        Navigator.popUntil(alertDialogContext, (route) => route.isFirst);
+                        //Navigator.popUntil(alertDialogContext, (route) => route.isFirst);
+                        Nav.navPop(context: alertDialogContext);
                       }
                       //Navigator.of(context).pop();
                       //Navigator.pop(alertDialogContext);

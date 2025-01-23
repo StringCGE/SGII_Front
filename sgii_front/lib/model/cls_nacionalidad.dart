@@ -95,4 +95,9 @@ class Nacionalidad extends DbObj {
       nombre: '',
     );
   }
+
+  @override
+  String getValueStr(){
+    return nombre;
+  }
 }

@@ -220,7 +220,7 @@ class PersonaService {
         List<Persona> nuevosItem = await Future.wait(
             data.map((item) => Persona.fromMap(item, true))
         );
-        bool seActualizaCache = false;//Cache local
+        bool seActualizaCache = false;
         for (int i = 0; i < nuevosItem.length; i++) {
           seActualizaCache = seActualizaCache || await _actualizarList(nuevosItem, i);
         }

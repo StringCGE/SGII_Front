@@ -17,12 +17,18 @@ import 'package:sgii_front/view/mod_nacionalidad/item_nacionalidad_widget.dart';
 
 
 class SinglePickListNacionalidadWidget extends StatefulWidget {
-  Nacionalidad? Function() getItem;
-  void Function(Nacionalidad? item) setItem;
+  final Nacionalidad? Function() getItem;
+  final void Function(Nacionalidad? item) setItem;
+  final String labelText;
+  final String hintText;
+  final String addtext;
   SinglePickListNacionalidadWidget({
     super.key,
     required this.getItem,
     required this.setItem,
+    required this.labelText,
+    required this.hintText,
+    required this.addtext,
   });
 
   @override
@@ -55,10 +61,10 @@ class SinglePickListNacionalidadWidgetState extends State<SinglePickListNacional
   List<ItemList<DbObj>> lItemPickList = [];
   @override
   Widget build(BuildContext context) {
-    return PickListWidget(
+    return PickWidget(
         lItemPickList: lItemPickList,
-        labelText: 'Nacionalidad',
-        hintText: 'Seleccione una persona',
+        labelText: widget.labelText,
+        hintText: widget.hintText,
         validator: validateNotEmpty,
         filterList: (BuildContext context, Future<void> Function() onSetState) {
           return SearchListWidget<Nacionalidad>(
@@ -130,7 +136,7 @@ class SinglePickListNacionalidadWidgetState extends State<SinglePickListNacional
                 context: context,
                 builder: (BuildContext alertDialogContext){
                   return AlertDialog(
-                    title: Text('Agregar Nacionalidad'),
+                    title: Text(widget.addtext),
                     content: CreateEditNacionalidadWidget(
                         mostrarCancelar: true,
                         item:null,

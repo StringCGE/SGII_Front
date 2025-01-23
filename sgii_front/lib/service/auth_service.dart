@@ -4,6 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:sgii_front/model/auth/cls_usuario.dart';
 import 'package:sgii_front/model/auth/session_data.dart';
+import 'package:sgii_front/model/cls_persona.dart';
+import 'package:sgii_front/model/cls_user.dart';
+import 'package:sgii_front/service/serv_persona.dart';
+import 'package:sgii_front/service/serv_user.dart';
 import 'package:sgii_front/util/common/common_data_service.dart';
 import 'package:sgii_front/util/common/parse.dart';
 import 'package:sgii_front/util/common/result.dart';
@@ -29,8 +33,8 @@ class AuthService{
   }
   Future<Result> loginUri(Uri url, String user, String psw) async {
     final body = jsonEncode({
-      'user': "user",
-      'password': "psw",
+      'user': user,
+      'password': psw,
     });
     try {
       dynamic response = null;
@@ -46,19 +50,27 @@ class AuthService{
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         String token = data['token'];
-        sessionData = tokenToSessionData(token);
+        sessionData = await tokenToSessionData(token);
         saveSessionToken(token);
         return Result(success: true);
       } else {
         clearSessionToken();
-        return Result(success: false, errror: 'Error ${response.statusCode}');
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        int intentos = data['intentos'];
+        bool usuarioBloqueado = data['usuarioBloqueado'];
+        return Result(
+          success: false,
+          errror: 'Error ${response.statusCode}',
+          intentos:intentos,
+          usuarioBloqueado: usuarioBloqueado);
       }
     } catch (e) {
       clearSessionToken();
-      return Result(success: true);
+      return Result(success: false);
       return Result(success: false, errror: 'Error ${e.toString()}');
     }
   }
+
   void logOut(){
     sessionData = null;
   }
@@ -90,7 +102,7 @@ class AuthService{
     await prefs.remove('ruta');
   }
 
-  static ClsSessionData tokenToSessionData(String token){
+  static Future<ClsSessionData> tokenToSessionData(String token) async{
     DateFormat formatDateTime = DateFormat('dd/MM/yyyy HH:mm:ss');
     final jwtDecode = JWT.decode(token);
     final Map<String, dynamic> payload = jwtDecode.payload;
@@ -100,37 +112,29 @@ class AuthService{
     String role = payload['role'];
     String urlFoto = Parse.getString(payload['urlFoto']);
     String email = payload['email'];
-    String usuario = payload['usuario'];
-    String nombre = payload['nombre'];
-    String apellido = payload['apellido'];
-    String nacimiento = payload['nacimiento'];
-    DateTime dt = Parse.getDateTimeDF(formatDateTime, payload['dtReg']);
-    String cedula = payload['cedula'];
+    int persona_id = int.parse(payload['persona_id']);
+    DateTime dtReg = Parse.getDateTime(payload['urlFoto']);
     String jti = payload['jti'];
     int nbf = payload['nbf'];
     int exp = payload['exp'];
     int iat = payload['iat'];
     String iss = payload['iss'];
     String aud = payload['aud'];
-    ClsUsuario usu = ClsUsuario(
-      id: id,
-      idApi: id,
-      dtReg: dt,
-      estado: estado,
-      idPersReg: idPersReg,
-      urlFoto: urlFoto,
+    User user = User(
+      persona: await PersonaService().directGetItemById( -1, persona_id),
       email: email,
-      usuario: usuario,
-      psw: "********",
+      urlFoto: urlFoto,
       role: role,
-      nombre: nombre,
-      apellido: apellido,
-      nacimiento: formatDateTime.parse(nacimiento),
-      cedula: cedula,
+      password: 'password',
+      id: id,
+      idApi: 0,
+      dtReg: dtReg,
+      idPersReg: idPersReg,
+      estado: estado,
     );
     return ClsSessionData(
       token: token,
-      usuario: usu,
+      usuario: user,
       jti: jti,
       nbf: Parse.timeSpam_To_DateTime(nbf),
       exp: Parse.timeSpam_To_DateTime(exp),

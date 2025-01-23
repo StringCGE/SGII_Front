@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sgii_front/controller/login_controller.dart';
 import 'package:sgii_front/util/common/app_string.dart';
 import 'package:sgii_front/util/common/app_style.dart';
+import 'package:sgii_front/util/common/create_user_controller.dart';
 
 class Estado{
   static Estado? _instance;
@@ -23,6 +24,8 @@ class Estado{
   LoginController cLogin = LoginController();
   /*StorageController cStorage = StorageController();
   EstadoAndroid estAndroid = EstadoAndroid();*/
+
+  CreateUserController cuc = CreateUserController();
 
 
   int indexConf = 1;

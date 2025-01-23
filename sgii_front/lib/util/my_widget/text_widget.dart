@@ -57,3 +57,69 @@ class TextWidget extends StatelessWidget {
     );
   }
 }
+//Clase que duplica TextWidget, no s epuede hacer mas por cuestion de tiempo
+
+class LineTextWidget extends StatelessWidget {
+  final String labelText;
+  final String hintText;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
+  final double labelWidth;
+
+  LineTextWidget({
+    super.key,
+    required this.labelText,
+    required this.hintText,
+    required this.controller,
+    required this.validator,
+    this.labelWidth = 100,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.cyan[50],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center, // Asegura que los elementos estén centrados
+        children: [
+          SizedBox(
+            width: labelWidth,
+            child: Text(
+              labelText,
+              style: const TextStyle(
+                fontSize: 12, // Tamaño más pequeño
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis, // Oculta texto que sobresale
+              ),
+              maxLines: 1,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: SizedBox(
+              height: 30, // Altura fija para el TextFormField
+              child: TextFormField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4), // Bordes del campo
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 4, // Ajuste del padding vertical
+                    horizontal: 8,
+                  ),
+                ),
+                validator: validator,
+                style: const TextStyle(fontSize: 12), // Tamaño de texto pequeño
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

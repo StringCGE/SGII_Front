@@ -1,11 +1,12 @@
 
 
 import 'package:sgii_front/model/auth/cls_usuario.dart';
+import 'package:sgii_front/model/cls_user.dart';
 
 class ClsSessionData {
   final String token;
 
-  ClsUsuario usuario;
+  User usuario;
   //Identificador unico de token
   final String jti;
   //not before token no valido hasta
@@ -28,7 +29,7 @@ class ClsSessionData {
     required this.aud,
   });
 
-  ClsUsuario get clsUsuario{
+  User get use{
     return usuario;
   }
 }

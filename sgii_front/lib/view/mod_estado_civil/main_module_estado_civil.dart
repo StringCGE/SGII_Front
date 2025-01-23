@@ -30,7 +30,7 @@ class MainModuleEstadoCivilState extends State<MainModuleEstadoCivil> {
           children: [
             Row(
               children: [
-                Text("Lista de personas"),
+                Text("Lista de Estado civil"),
               ],
             ),
             Expanded(
